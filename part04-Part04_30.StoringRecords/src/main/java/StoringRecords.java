@@ -1,4 +1,5 @@
 
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -22,10 +23,15 @@ public class StoringRecords {
 
     public static ArrayList<Person> readRecordsFromFile(String file) {
         ArrayList<Person> persons = new ArrayList<>();
-
-        // Write here the code for reading from file
-        // and printing the read records
+        try (Scanner scannerFile = new Scanner(Paths.get(file))) {
+            while (scannerFile.hasNextLine()) {
+                String line = scannerFile.nextLine();
+                String[] personDetails = line.split(",");
+                persons.add(new Person(personDetails[0], Integer.valueOf(personDetails[1])));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return persons;
-
     }
 }
